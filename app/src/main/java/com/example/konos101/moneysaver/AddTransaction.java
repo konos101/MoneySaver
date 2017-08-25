@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
@@ -25,6 +26,7 @@ public class AddTransaction extends Activity{
     private Context context = this;
     private EditText dateText,txtTransName,txtQuantity;
     private final Calendar myTransDate = Calendar.getInstance();
+    private Button add;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +36,7 @@ public class AddTransaction extends Activity{
         dateText = (EditText) findViewById(R.id.datePicker);
         txtTransName = (EditText) findViewById(R.id.TransactionName);
         txtQuantity = (EditText) findViewById(R.id.Quantity);
+
 
         //MAKE DATETEXTVIEW ON SELECT OPEN DATEPICKER
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener(){
@@ -66,9 +69,17 @@ public class AddTransaction extends Activity{
     public void addNew(View v){
 
         Intent intent = new Intent(this, HomeMenu.class);
-        intent.putExtra("date",dateText.getText().toString());
-        intent.putExtra("name",txtTransName.getText().toString());
-        intent.putExtra("quantity",txtQuantity.getText().toString());
+
+        DataBaseHandles db = new DataBaseHandles(this);
+        String date = dateText.getText().toString();
+        String name = txtTransName.getText().toString();
+        Float quantity = Float.parseFloat(txtQuantity.getText().toString());
+
+        int id = db.getListItemsCount() + 1;
+        ListItem listItem = new ListItem(id, date,name,quantity);
+
+        db.addTransaction(listItem);
+
         startActivity(intent);
     }
 }

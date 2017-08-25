@@ -10,17 +10,25 @@ public class ListItem {
     private int id;
     private String date;
     private String transName;
-    private String quantity;
+    private Float quantity;
 
     //CCONSTRUCTORS
     public ListItem(){
 
     }
-    public ListItem(String date, String transName, String quantity) {
+    public ListItem(String date, String transName, Float quantity) {
         this.date = date;
         this.transName = transName;
         this.quantity = quantity;
     }
+
+    public ListItem(int id, String date, String transName, Float quantity) {
+        this.id = id;
+        this.date = date;
+        this.transName = transName;
+        this.quantity = quantity;
+    }
+
     //GETTERS
     public String getDate() {
         return date;
@@ -28,7 +36,7 @@ public class ListItem {
     public String getTransName() {
         return transName;
     }
-    public String getQuantity() {
+    public Float getQuantity() {
         return quantity;
     }
     public int getId() {
@@ -42,10 +50,9 @@ public class ListItem {
     public void setTransName(String transName) {
         this.transName = transName;
     }
-    public void setQuantity(String quantity) {
+    public void setQuantity(Float quantity) {
         this.quantity = quantity;
     }
-
     public void setId(int id) {
         this.id = id;
     }

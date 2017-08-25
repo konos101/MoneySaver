@@ -49,15 +49,15 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="395dp"
+        android:id="@+id/linearLayout"
+        android:layout_width="344dp"
         android:layout_height="75dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/TotalMonth"
-        android:id="@+id/linearLayout"
-        android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginStart="8dp">
+        app:layout_constraintTop_toBottomOf="@+id/TotalMonth">
 
         <TextView
             android:id="@+id/TotalIn"
@@ -81,12 +81,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add"
-        android:layout_marginTop="52dp"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         android:onClick="onAdd"
-        android:layout_marginLeft="161dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginStart="161dp" />
+        tools:layout_editor_absoluteX="136dp"
+        android:layout_marginTop="53dp"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <ListView
         android:id="@+id/listTrans"

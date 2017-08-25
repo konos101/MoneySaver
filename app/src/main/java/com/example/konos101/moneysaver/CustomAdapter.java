@@ -18,11 +18,11 @@ public class CustomAdapter extends BaseAdapter {
 
     private String date;
     private String transName;
-    private String quantity;
+    private Float quantity;
 
     private LayoutInflater inflater;
 
-    public CustomAdapter(Context appContext, String date, String transName, String quantity){
+    public CustomAdapter(Context appContext, String date, String transName, Float quantity){
         this.context = appContext;
         this.date = date;
         this.transName = transName;
@@ -55,7 +55,7 @@ public class CustomAdapter extends BaseAdapter {
         TextView quantity = (TextView) convertView.findViewById(R.id.quantity);
         date.setText(this.date);
         transName.setText(this.transName);
-        quantity.setText(this.quantity);
+        quantity.setText(String.valueOf(this.quantity));
 
         return convertView;
     }

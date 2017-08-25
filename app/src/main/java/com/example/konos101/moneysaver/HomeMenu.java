@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Konos101 on 16/08/2017.
@@ -23,24 +24,36 @@ public class HomeMenu extends AppCompatActivity {
     private Button add;
     private TextView textMonth;
     public ListView listTrans;
-
-    /*
-    String date[] = {"16/02/1996","01/10/1997","16/04/2007","16/02/1996","01/10/1997","16/04/2007"};
-    String transName[] = {"Connor","Ariadna","Ryan","Connor","Ariadna","Ryan"};
-    String quantity[] = {"21","19","10","21","19","10"};
-    */
+    private DataBaseHandles db = new DataBaseHandles(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
-        textMonth = (TextView) findViewById(R.id.textMonth);
-        //textMonth.setText();
-
         listTrans =(ListView) findViewById(R.id.listTrans);
-        Intent intent = getIntent();
-        addToList(intent);
+
+        CustomAdapter customAdapter = null;
+        List<ListItem> listItems = db.getAllListItems();
+        if (!listItems.isEmpty() || listItems != null) {
+            int count = db.getListItemsCount();
+            for (int i = 0; i < count; i++){
+                customAdapter = new CustomAdapter(getApplicationContext(), listItems.get(i).getDate(), listItems.get(i).getTransName(), listItems.get(i).getQuantity());
+                listTrans.setAdapter(customAdapter);
+
+            }
+
+
+            /*
+            for (ListItem item : listItems) {
+                customAdapter = new CustomAdapter(getApplicationContext(), item.getDate(), item.getTransName(), item.getQuantity());
+                int hola = item.getId();
+                listTrans.setAdapter(customAdapter);
+            }*/
+
+        }
+
+        textMonth = (TextView) findViewById(R.id.textMonth);
 
         add = (Button) findViewById(R.id.btnNewTrans);
     }
@@ -48,11 +61,6 @@ public class HomeMenu extends AppCompatActivity {
     public void onAdd(View v){
         Intent intent = new Intent(this, AddTransaction.class);
         startActivity(intent);
-    }
-    public void addToList(Intent intent){
-        CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(),intent.getStringExtra("date"),intent.getStringExtra("name"),intent.getStringExtra("quantity"));
-
-        listTrans.setAdapter(customAdapter);
     }
 
     public void nextMonth(View v){

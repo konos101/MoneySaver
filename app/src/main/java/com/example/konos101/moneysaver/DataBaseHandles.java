@@ -18,10 +18,10 @@ import java.util.StringTokenizer;
 public class DataBaseHandles extends SQLiteOpenHelper {
 
     //VARIABLES
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 8;
     private static final String DATABASE_NAME = "transactionsList";
     private static final String TABLE_TRANSACTIONS = "transactions";
-    private static final String KEY_ID = "id";
+    private static final String KEY_ID = "_ids";
     private static final String KEY_DATE = "date";
     private static final String KEY_NAME = "name";
     private static final String KEY_QUANTITY = "quantity";
@@ -32,15 +32,15 @@ public class DataBaseHandles extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TRANSACTIONLIST = "CREATE TABLE" + TABLE_TRANSACTIONS + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_DATE + " TEXT,"
+        String CREATE_TRANSACTIONLIST = "CREATE TABLE " + TABLE_TRANSACTIONS + "("
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_DATE + " TEXT,"
                 + KEY_NAME + " TEXT," + KEY_QUANTITY + " FLOAT" + ")";
         db.execSQL(CREATE_TRANSACTIONLIST);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSACTIONS);
+        db.execSQL("DROP TABLE " + TABLE_TRANSACTIONS);
 
         onCreate(db);
     }
@@ -49,6 +49,7 @@ public class DataBaseHandles extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(KEY_ID, listItem.getId());
         values.put(KEY_DATE, listItem.getDate());
         values.put(KEY_NAME, listItem.getTransName());
         values.put(KEY_QUANTITY,listItem.getQuantity());
@@ -67,7 +68,7 @@ public class DataBaseHandles extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
         ListItem listItem = new ListItem(cursor.getString(1),
-                cursor.getString(2),cursor.getString(3));
+                cursor.getString(2),cursor.getFloat(3));
 
         return listItem;
     }
@@ -79,16 +80,16 @@ public class DataBaseHandles extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery,null);
 
         if (cursor.moveToFirst()){
+            ListItem listItem = new ListItem();
             do{
-                ListItem listItem = new ListItem();
-
                 listItem.setDate(cursor.getString(1));
                 listItem.setTransName(cursor.getString(2));
-                listItem.setQuantity(cursor.getString(3));
+                listItem.setQuantity(cursor.getFloat(3));
 
                 listItemList.add(listItem);
             }while (cursor.moveToNext());
         }
+        db.close();
         return listItemList;
     }
 
@@ -96,9 +97,10 @@ public class DataBaseHandles extends SQLiteOpenHelper {
         String countQuery = "SELECT * FROM " + TABLE_TRANSACTIONS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
+        int total = cursor.getCount();
         cursor.close();
 
-        return cursor.getCount();
+        return total;
     }
     public int updateListItem(ListItem listItem){
         SQLiteDatabase db = this.getWritableDatabase();
